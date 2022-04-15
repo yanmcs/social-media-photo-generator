@@ -20,7 +20,7 @@ scrape_session = browser.scrape_session()
 @app.route("/")
 def index():
     parser = reqparse.RequestParser()  # initialize
-    parser.add_argument('url', required=True)  # add arguments
+    parser.add_argument('url')  # add arguments
     args = parser.parse_args()  # parse arguments to dictionary
     if args['url']:
         print(url)
@@ -38,7 +38,8 @@ def index():
         branding_text = info['branding-text'].upper()
         image = social_image_builder(image, category, title, logo, branding_text, border=40)
         # Display edited image on screen using flask restful
-        return image.tobytes(),200
+        return 'teste',200
+        #return image.tobytes(),200
     else:
         return 'we need a url', 406
 
