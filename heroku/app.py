@@ -1,12 +1,12 @@
 # MY scripts
-from sre_compile import isstring
 import scraper
 import imagebuilder
 # Everything else
 from flask import Flask
 from flask_restful import reqparse
 import os
-from bs4 import BeautifulSoup as Bs
+
+print('Starting Flask...')
 
 app = Flask(__name__)
 
