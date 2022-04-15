@@ -24,9 +24,6 @@ def index():
     else:
         return 'we need a url', 406
 
-    browser = scraper.Browser()
-    driver = browser.new_driver(local=True)
-    scrape_session = browser.scrape_session()
     html_scrapped_page = browser.get_html_using_request(url, scrape_session)  #  trying to scrape using requests
     if html_scrapped_page[1] != 200:  #  if not possible we try to use chromedriver to scrape page
         print('Bloqueado')
