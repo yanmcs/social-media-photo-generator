@@ -2,6 +2,6 @@ selenium
 bs4
 cfscrape
 requests
-PIL
+pillow
 flask
 flask_restful
