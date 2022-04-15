@@ -5,6 +5,9 @@ import imagebuilder
 from flask import Flask
 from flask_restful import reqparse
 import os
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
 
 print('Starting Flask...')
 
