@@ -14,7 +14,7 @@ print('Starting Flask...')
 app = Flask(__name__)
 
 browser = scraper.Browser()
-driver = browser.new_driver()
+#driver = browser.new_driver()
 scrape_session = browser.scrape_session()
 
 @app.route("/")
@@ -24,27 +24,22 @@ def index():
     args = parser.parse_args()  # parse arguments to dictionary
     if args['url']:
         url = args['url']  # set variable for url
+        html_scrapped_page = browser.get_html_using_request(url, scrape_session)  #  trying to scrape using requests
+        if html_scrapped_page[1] != 200:  #  if not possible we try to use chromedriver to scrape page
+            return "Bloqueado",406
+            #html_scrapped_page = browser.get_html_using_chrome(url,driver)
+        info = browser.html_to_json(html_scrapped_page[0])
+        print(info)
+        image = info['image']
+        category = info['category']
+        title = info['title']
+        logo = info['logo']
+        branding_text = info['branding-text'].upper()
+        image = imagebuilder.social_image_builder(image, category, title, logo, branding_text, border=40)
+        # Display edited image on screen using flask restful
+        return image.tobytes(),200
     else:
         return 'we need a url', 406
-
-    html_scrapped_page = browser.get_html_using_request(url, scrape_session)  #  trying to scrape using requests
-    if html_scrapped_page[1] != 200:  #  if not possible we try to use chromedriver to scrape page
-        print('Bloqueado')
-        html_scrapped_page = browser.get_html_using_chrome(url,driver)
-
-    info = browser.html_to_json(html_scrapped_page[0])
-    print(info)
-
-    image = info['image']
-    category = info['category']
-    title = info['title']
-    logo = info['logo']
-    branding_text = info['branding-text'].upper()
-
-    image = imagebuilder.social_image_builder(image, category, title, logo, branding_text, border=40)
-
-    # Display edited image on screen using flask restful
-    return image.tobytes(),200
 
 
 if __name__ == "__main__":
