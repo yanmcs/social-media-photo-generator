@@ -29,11 +29,11 @@ def index():
     scrape_session = browser.scrape_session()
     html_scrapped_page = browser.get_html_using_request(url, scrape_session)  #  trying to scrape using requests
     if html_scrapped_page[1] != 200:  #  if not possible we try to use chromedriver to scrape page
-        #print('Bloqueado')
+        print('Bloqueado')
         html_scrapped_page = browser.get_html_using_chrome(url,driver)
 
     info = browser.html_to_json(html_scrapped_page[0])
-    #print(info)
+    print(info)
 
     image = info['image']
     category = info['category']
