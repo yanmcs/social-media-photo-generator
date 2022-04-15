@@ -41,7 +41,7 @@ def index():
     image = imagebuilder.social_image_builder(image, category, title, logo, branding_text, border=40)
 
     # Display edited image on screen using flask restful
-    return image.tobytes(),200,{'Content-Type': 'image/jpeg'}
+    return image.tobytes(),200
 
 
 if __name__ == "__main__":
