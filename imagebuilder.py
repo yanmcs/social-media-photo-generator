@@ -38,13 +38,13 @@ def social_image_builder(image, category, title, logo, branding_text, border=40)
     logo_img = logo_img.resize((int(logo_size), int(logo_size)))
     print(logo_img.mode)
     # Setting category font and style
-    category_font = ImageFont.truetype('Roboto-Bold.ttf', 30)
+    category_font = ImageFont.truetype('fonts/Roboto-Bold.ttf', 30)
     category_text_width, category_text_height = I1.textsize(category, font=category_font)
     category_text_width, category_text_height = I1.textsize(category, font=category_font)
-    font_branding_text = ImageFont.truetype('Roboto-Medium.ttf', logo_size)
+    font_branding_text = ImageFont.truetype('fonts/Roboto-Medium.ttf', logo_size)
     font_branding_text_width, font_branding_text_height = I1.textsize(branding_text, font=font_branding_text)
     # Setting title font and style
-    font_title = ImageFont.truetype('Roboto-Bold.ttf', 60)
+    font_title = ImageFont.truetype('fonts/Roboto-Bold.ttf', 60)
     # Split text into a specified number of lines
     title = split_text(title, (image_width - border * 2), font_title)
     # Call textsize method to find the size of the title text

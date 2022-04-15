@@ -27,4 +27,4 @@ if __name__ == '__main__':
     # Display edited image
     image.show()
     # Save the edited image
-    image.save("text_on_image.jpg", "JPEG", optimize=True)
+    image.save("social_media_image.jpg", "JPEG", optimize=True)
