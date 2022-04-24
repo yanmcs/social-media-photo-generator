@@ -1,6 +1,6 @@
 # MY scripts
 import scraper
-from imagebuilder import social_image_builder
+import image_builder
 # Everything else
 from flask import Flask
 from flask_restful import reqparse
@@ -36,10 +36,11 @@ def index():
         title = info['title']
         logo = info['logo']
         branding_text = info['branding-text'].upper()
-        image = social_image_builder(image, category, title, logo, branding_text, border=40)
+        image = image_builder.social_image_builder(image, category, title, logo, branding_text, border=40)
+        # Save image to a file
+        image.save('static/image.png')
         # Display edited image on screen using flask restful
-        return 'teste',200
-        #return image.tobytes(),200
+        return '<img src="static/image.png" alt="social image" />',200
     else:
         return 'we need a url', 406
 
