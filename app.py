@@ -23,7 +23,7 @@ def index():
     parser.add_argument('url')  # add arguments
     args = parser.parse_args()  # parse arguments to dictionary
     if args['url']:
-        print(url)
+        print(args['url'])
         url = args['url']  # set variable for url
         html_scrapped_page = browser.get_html_using_request(url, scrape_session)  #  trying to scrape using requests
         if html_scrapped_page[1] != 200:  #  if not possible we try to use chromedriver to scrape page
@@ -37,10 +37,12 @@ def index():
         logo = info['logo']
         branding_text = info['branding-text'].upper()
         image = image_builder.social_image_builder(image, category, title, logo, branding_text, border=40)
-        # Save image to a file
-        image.save('static/image.png')
-        # Display edited image on screen using flask restful
-        return '<img src="static/image.png" alt="social image" />',200
+        # Save image to disk
+        image.save('image.png')
+        # Return image to user in html format
+        return '<img src="image.png" alt="image" />',200
+
+    
     else:
         return 'we need a url', 406
 
