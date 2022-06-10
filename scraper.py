@@ -7,6 +7,14 @@ import cfscrape
 
 class Browser:
 
+    # Removing all special caracters and line breaks
+    def clean_text(self, text):
+        text = text.replace('\n', ' ')
+        text = text.replace('\t', ' ')
+        text = text.replace('\r', ' ')
+        text = text.strip()
+        return text
+
     # Function to check if element is a link or not
     def check_if_element_is_link(self, element):
         element_size = len(element.get_text())
@@ -92,9 +100,14 @@ class Browser:
         # Get favicon
         if soup.find('link', attrs={"rel": "icon"}):
             info["logo"] = soup.find('link', attrs={"rel": "icon"})['href']
+            if '//' in info['logo'] and 'http' not in info["logo"]:
+                info["logo"] = 'http:' + info["logo"]
+            elif '//' not in info["logo"]:
+                info["logo"] = 'http://' + info["article-url"].split('/')[2] + info["logo"]
         else:
             info["logo"] = ''
             #return 'Erro: site sem favicon'
+        info['logo'] = self.clean_text(info['logo'])
 
         # Get logo
         if info['logo'] == '':
@@ -109,32 +122,34 @@ class Browser:
                     except:
                         logo = ''
                         #return 'Erro: não encontrei o logotipo'
-            info["logo"] = logo  
+            finally:
+                info["logo"] = self.clean_text(logo)  
 
         # Get website name
         try:
             website_name = soup.find('meta', attrs={"property": "og:site_name"})['content']
+            info['branding-text'] = website_name
         except:
             #return 'Erro: não existe a meta tag que define o nome do site'
-            website_name = ''
             pass
-        info["branding-text"] = website_name
+        finally:
+            info["branding-text"] = self.clean_text(info["branding-text"])
 
         # Get post category
         if soup.find('meta', attrs={"property": "article:section"}):
-            info["category"] = soup.find('meta', attrs={"property": "article:section"})['content']     
+            info["category"] = self.clean_text(soup.find('meta', attrs={"property": "article:section"})['content'])    
 
         # Get H1
         h1 = soup.find_all('h1')
-        info["title"] = h1[-1].get_text()
+        info["title"] = self.clean_text(h1[-1].get_text())
 
         # Get cover image or whatever is possible
         if the_content.select('img'):
             try:
-                if 'http' in the_content.select('img')[0]['src'] and 'data:image' not in the_content.select('img')[0]['src']:
+                if 'http' in the_content.select('img')[0]['src'] and 'data:image' not in the_content.select('img')[0]['src'] and 'gravatar' not in the_content.select('img')[0]['src']:
                     info["image"] = the_content.select('img')[0]['src']
             except:
-                if 'http' in the_content.select('img')[0]['data-src'] and 'data:image' not in the_content.select('img')[0]['data-src']:
+                if 'http' in the_content.select('img')[0]['data-src'] and 'data:image' not in the_content.select('img')[0]['data-src'] and 'gravatar' not in the_content.select('img')[0]['data-src']:
                     info["image"] = the_content.select('img')[0]['data-src']
         if len(str(info["image"])) < 10:
             if soup.find('meta', attrs={"property": "og:image"}):      

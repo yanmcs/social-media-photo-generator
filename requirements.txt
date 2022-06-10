@@ -1,7 +1,7 @@
-selenium
-bs4
-cfscrape
+Flask
+Flask-RESTful
 requests
+cfscrape
+beautifulsoup4
+selenium
 pillow
-flask
-flask_restful

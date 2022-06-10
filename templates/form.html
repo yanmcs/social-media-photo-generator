@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <title>Social Image Generator</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+        <style>
+            body{
+                padding: 20px;
+            }
+            label, input, select{
+                margin: 5px 0;
+                padding: 5px 10px;
+            }
+            form{
+                font-size: 18px;
+            }
+        </style>
+    </head>
+    <body style="text-align:center;">
+        <h1>Social Image Generator</h1>
+        <p>
+            You can <b>easily generate images</b> for your social media accounts using this tool. Just fill the URL in the from below and click the "Generate" button.<br>
+            You need <b>at least one image in the article</b> to generate the social image.
+        </p>
+        <form action="/">
+            <label for="url">Article URL:</label><br>
+            <input style="width: 600px; max-width:100%;" type="text" name="url" placeholder="insert url with https://">
+            <br>
+            <label for="height">Image size:</label><br>
+            <select name="height" id="height">
+                <option selected value="1080">1080px (square)</option>
+                <option value="720">720px (landscape)</option>
+                <option value="1350">1350px (portrait)</option>
+                <option value="1920">1920px (stories)</option>
+            </select>
+            <br>
+            <label for="border">Margin:</label><br>
+            <select name="border">
+            <option selected value="40">40px</option>
+            <option value="50">50px</option>
+            <option value="60">60px</option>
+            <option value="70">70px</option>  
+            <option value="80">80px</option>
+            </select>
+            <br>
+            <input type="submit" value="Generate image">            
+        </form>
+        <p>
+            You can find the source-code of this tool on <a href="https://github.com/yanmcs/social-media-photo-generator" target="_blank">Github</a>"
+        </p>
+    </body>
+    </html>

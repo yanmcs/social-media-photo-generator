@@ -20,17 +20,26 @@ def split_text(text, max_width, font, draw_method):
     splitted_text = "\n".join(lines)
     return splitted_text
 
-def social_image_builder(url, category, title, logo, branding_text, border=40, height=1080, width=1080):
+def social_image_builder(url, category, title, logo, branding_text, font_size=60, border=40, height=1080, width=1080, color='000000'):
+    # Convert hex color to RGBA
+    color = tuple(int(color[i:i+2], 16) for i in (0, 2 ,4))
     # Open an Image that will be on the background of the final image
     file = BytesIO(requests.get(url, stream=True).raw.read())
     img = Image.open(file)
     # Convert image to keep transparency
     img = img.convert('RGBA')
-    # Resize image to 1080px height and calculate width based on aspect ratio
-    img = img.resize((int(img.size[0] * height / img.size[1]), height))
-    # Crop image to 1080px height and 1080px width centered
-    img = img.crop(((img.size[0] - width) / 2, 0, (img.size[0] + width) / 2, height)) 
-    img = img.convert('RGBA')
+    # If image is horizontal we fit to desired height
+    if img.size[0] > img.size[1]:
+        # Resize image to fit height but keep aspect ratio
+        img = img.resize((int(img.size[0] * height / img.size[1]), height), Image.ANTIALIAS)
+        # Crop image to fit width centered and keep aspect ratio
+        img = img.crop(((img.size[0] - width) / 2, 0, (img.size[0] + width) / 2, height))
+    # If image is vertical we fit to desired width
+    else:
+        # Resize image to fit width but keep aspect ratio
+        img = img.resize((width, int(img.size[1] * width / img.size[0])), Image.ANTIALIAS)
+        # Crop image to fit height centered and keep aspect ratio
+        img = img.crop((0, (img.size[1] - height) / 2, width, (img.size[1] + height) / 2))
     # find image height and width
     image_height = img.size[1]
     image_width = img.size[0]
@@ -44,30 +53,37 @@ def social_image_builder(url, category, title, logo, branding_text, border=40, h
     # We set all variable and resize everything we need first
     # Resize the logo image
     logo_size = 30
-    logo_img = BytesIO(requests.get(logo, stream=True).raw.read())
-    logo_img = Image.open(logo_img)
-    logo_img = logo_img.convert('RGBA')
-    logo_img = logo_img.resize((int(logo_size), int(logo_size)))
+    if logo != '':
+        try:
+            logo_img = BytesIO(requests.get(logo, stream=True).raw.read())
+            logo_img = Image.open(logo_img)
+            logo_img = logo_img.convert('RGBA')
+            logo_img = logo_img.resize((int(logo_size), int(logo_size)))
+        except:
+            # Logo image will be a white square with the same size of the logo_size
+            logo_img = Image.new('RGBA', (logo_size, logo_size), (255, 255, 255, 0))
+    else:
+        logo_img = Image.new('RGBA', (logo_size, logo_size), (255, 255, 255, 255))
     # Setting category font and style
-    category_font = ImageFont.truetype('fonts/Roboto-Bold.ttf', 30)
+    category_font = ImageFont.truetype('fonts/Roboto-Bold.ttf', (font_size//2) )
     category_text_width, category_text_height = I1.textsize(category, font=category_font)
     category_text_width, category_text_height = I1.textsize(category, font=category_font)
     font_branding_text = ImageFont.truetype('fonts/Roboto-Medium.ttf', logo_size)
     font_branding_text_width, font_branding_text_height = I1.textsize(branding_text, font=font_branding_text)
     # Setting title font and style
-    font_title = ImageFont.truetype('fonts/Roboto-Bold.ttf', 60)
+    font_title = ImageFont.truetype('fonts/Roboto-Bold.ttf', font_size)
     # Split text into a specified number of lines
     title = split_text(title, (image_width - border * 2), font_title, I1)
     # Call textsize method to find the size of the title text
     title_width, title_height = I1.textsize(title, font=font_title)
     
     # Add background color gradient to the image to make title stand out
-    rectangle_height_x_position = image_height - title_height - logo_size - border - 50
+    rectangle_height_y_position = image_height - title_height - logo_size - border - 80
     transparency = 0
-    while rectangle_height_x_position < image_height:
-        I1.rectangle(((0, rectangle_height_x_position), (image_width, rectangle_height_x_position)), fill=(0, 0, 0, transparency))
-        rectangle_height_x_position += 1
-        if transparency < 125:
+    while rectangle_height_y_position < image_height:
+        I1.rectangle(((0, rectangle_height_y_position), (image_width, rectangle_height_y_position)), fill=(0, 0, 0, transparency))
+        rectangle_height_y_position += 1
+        if transparency < 180: 
             transparency += 1
     
     if category != '':
