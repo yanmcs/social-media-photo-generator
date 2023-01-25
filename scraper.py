@@ -1,4 +1,6 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
 import os
 from bs4 import BeautifulSoup as Bs
 import html as ht
@@ -30,9 +32,10 @@ class Browser:
     # Creating chromedriver to scrape HTML if we are being blocked on requests
     # Set local=True for local testing
     def new_driver(self,local=False):
-        chrome_options = webdriver.ChromeOptions()
-        if not local:
-            chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")  # disable for local run, enable to commit
+        chrome_options = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+        # check if we are running on heroku
+        if os.environ.get("IS_HEROKU"):
+            chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--no-sandbox")
@@ -43,11 +46,11 @@ class Browser:
         # Set user agent
         chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36")
 
-        if local:
-            driver = webdriver.Chrome(chrome_options=chrome_options) # enable for local run, disable to commit
-        else:
+        if os.environ.get("IS_HEROKU"):
             driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), \
-                                  chrome_options=chrome_options)  # disable for local run, enable to commit
+                                  chrome_options=chrome_options)
+        else:
+            driver = webdriver.Chrome(chrome_options=chrome_options)
         
         return driver
 

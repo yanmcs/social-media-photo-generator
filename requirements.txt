@@ -5,3 +5,4 @@ cfscrape
 beautifulsoup4
 selenium
 pillow
+webdriver-manager

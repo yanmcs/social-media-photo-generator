@@ -1,11 +1,11 @@
 # MY scripts
-from io import BytesIO
 import scraper
 import image_builder
 # Everything else
 from flask import Flask, request, send_file, render_template
 import os
 import traceback
+from io import BytesIO
 
 print('Starting Flask...')
 
