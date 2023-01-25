@@ -1,0 +1,5 @@
+{
+    "dependencies": {
+        "chrome-aws-lambda": ">=1.0.0"
+    }
+}
