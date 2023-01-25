@@ -32,6 +32,10 @@ class Browser:
     # Creating chromedriver to scrape HTML if we are being blocked on requests
     # Set local=True for local testing
     def new_driver(self):
+
+        if os.environ.get("IS_VERCEL"):
+            # still needs to figure out how to make it work on vercel
+            return None
         
         chrome_options = webdriver.ChromeOptions()
         # check if we are running on heroku
@@ -51,9 +55,6 @@ class Browser:
         if os.environ.get("IS_HEROKU"):
             driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), \
                                   chrome_options=chrome_options)
-        elif os.environ.get("IS_VERCEL"):
-            # still needs to figure out how to make it work on vercel
-            driver = None
         else:
             driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
         
