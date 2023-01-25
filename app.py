@@ -11,6 +11,7 @@ print('Starting Flask...')
 
 app = Flask(__name__, static_url_path='/static')
 
+
 browser = scraper.Browser()
 driver = browser.new_driver()
 scrape_session = browser.scrape_session()
@@ -29,6 +30,7 @@ def index():
             url = url.replace('%3F', '?')
             url = url.replace('%3D', '=')
             url = url.replace('%26', '&')
+
             border = request.args.get('border')
             height = request.args.get('height')
             color = request.args.get('color')
