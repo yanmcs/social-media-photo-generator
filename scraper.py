@@ -37,9 +37,7 @@ class Browser:
         # check if we are running on heroku
         if os.environ.get("IS_HEROKU"):
             chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-        # check if we are running in vercel, if it is we will use the tmp folder
-        elif os.environ.get("IS_VERCEL"):
-            chrome_options.binary_location = '/tmp/chromium'
+
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--no-sandbox")
@@ -54,8 +52,9 @@ class Browser:
             driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), \
                                   chrome_options=chrome_options)
         elif os.environ.get("IS_VERCEL"):
-            driver = webdriver.Chrome(executable_path='/tmp/chromedriver', \
-                                  chrome_options=chrome_options)
+            # install chromedriver in /tmp/chromedriver
+            ChromeDriverManager(path='/tmp/chromedriver').install()
+            driver = webdriver.Chrome(service=ChromeService('/tmp/chromedriver'), chrome_options=chrome_options)
         else:
             driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
         
