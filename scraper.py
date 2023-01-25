@@ -31,8 +31,9 @@ class Browser:
 
     # Creating chromedriver to scrape HTML if we are being blocked on requests
     # Set local=True for local testing
-    def new_driver(self,local=False):
-        chrome_options = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+    def new_driver(self):
+        
+        chrome_options = webdriver.ChromeOptions(service=ChromeService(ChromeDriverManager().install()))
         # check if we are running on heroku
         if os.environ.get("IS_HEROKU"):
             chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
@@ -50,7 +51,7 @@ class Browser:
             driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), \
                                   chrome_options=chrome_options)
         else:
-            driver = webdriver.Chrome(chrome_options=chrome_options)
+            driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
         
         return driver
 
