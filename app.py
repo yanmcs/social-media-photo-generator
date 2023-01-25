@@ -1,25 +1,24 @@
 # MY scripts
+from io import BytesIO
 import scraper
 import image_builder
 # Everything else
 from flask import Flask, request, send_file, render_template
 import os
 import traceback
-from io import BytesIO
 
 print('Starting Flask...')
 
 app = Flask(__name__, static_url_path='/static')
 
-
 browser = scraper.Browser()
-driver = browser.new_driver()
+#driver = browser.new_driver()
 scrape_session = browser.scrape_session()
 
 @app.route("/")
 def index():
-    global browser
-    global driver
+    #global browser
+    #global driver
     global scrape_session
     if 'url' in request.args:
         try:
@@ -30,7 +29,6 @@ def index():
             url = url.replace('%3F', '?')
             url = url.replace('%3D', '=')
             url = url.replace('%26', '&')
-
             border = request.args.get('border')
             height = request.args.get('height')
             color = request.args.get('color')
@@ -46,8 +44,8 @@ def index():
                 color = '000000'
 
             html_scrapped_page = browser.get_html_using_request(url, scrape_session)  #  trying to scrape using requests
-            if html_scrapped_page[1] != 200:  #  if not possible we try to use chromedriver to scrape page
-                html_scrapped_page = browser.get_html_using_chrome(url,driver)
+            #if html_scrapped_page[1] != 200:  #  if not possible we try to use chromedriver to scrape page
+                #html_scrapped_page = browser.get_html_using_chrome(url,driver)
             info = browser.html_to_json(html_scrapped_page[0])
             print(info)
             image = info['image']
