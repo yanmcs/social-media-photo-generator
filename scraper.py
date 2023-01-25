@@ -52,9 +52,9 @@ class Browser:
             driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), \
                                   chrome_options=chrome_options)
         elif os.environ.get("IS_VERCEL"):
-            # install chromedriver in /tmp/chromedriver
-            ChromeDriverManager(path='/tmp/chromedriver').install()
-            driver = webdriver.Chrome(service=ChromeService('/tmp/chromedriver'), chrome_options=chrome_options)
+            # install chromedriver in tmp/chromedriver
+            ChromeDriverManager(path='tmp/chromedriver').install()
+            driver = webdriver.Chrome(service=ChromeService('tmp/chromedriver'), chrome_options=chrome_options)
         else:
             driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
         
