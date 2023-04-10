@@ -4,7 +4,6 @@ import scraper
 import image_builder
 # Everything else
 from flask import Flask, request, send_file, render_template
-import os
 import traceback
 
 print('Starting Flask...')
@@ -12,13 +11,10 @@ print('Starting Flask...')
 app = Flask(__name__, static_url_path='/static')
 
 browser = scraper.Browser()
-#driver = browser.new_driver()
 scrape_session = browser.scrape_session()
 
 @app.route("/")
 def index():
-    #global browser
-    #global driver
     global scrape_session
     if 'url' in request.args:
         try:
@@ -44,8 +40,6 @@ def index():
                 color = '000000'
 
             html_scrapped_page = browser.get_html_using_request(url, scrape_session)  #  trying to scrape using requests
-            #if html_scrapped_page[1] != 200:  #  if not possible we try to use chromedriver to scrape page
-                #html_scrapped_page = browser.get_html_using_chrome(url,driver)
             info = browser.html_to_json(html_scrapped_page[0])
             print(info)
             image = info['image']
@@ -74,5 +68,4 @@ def index():
         return render_template('form.html'), 200, {'Content-Type': 'text/html'}
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run()

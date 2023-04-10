@@ -1,5 +1,3 @@
-from selenium import webdriver
-import os
 from bs4 import BeautifulSoup as Bs
 import html as ht
 import cfscrape
@@ -15,6 +13,7 @@ class Browser:
         text = text.strip()
         return text
 
+
     # Function to check if element is a link or not
     def check_if_element_is_link(self, element):
         element_size = len(element.get_text())
@@ -26,45 +25,7 @@ class Browser:
                 return False
         else:
             return False
-
-    # Creating chromedriver to scrape HTML if we are being blocked on requests
-    # Set local=True for local testing
-    def new_driver(self):
-        chrome_options = webdriver.ChromeOptions()
         
-        # For Heroku deployment
-        if os.environ.get("GOOGLE_CHROME_BIN") is not None:
-            chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")  # disable for local run, enable to commit
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--disable-gpu")
-
-        # For ChromeDriver version 79.0.3945.16 or over
-        chrome_options.add_argument('--disable-blink-features=AutomationControlled')
-        # Set user agent
-        chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36")
-
-        if os.environ.get("CHROMEDRIVER_PATH") is not None:
-            driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), \
-                                  chrome_options=chrome_options)  # disable for local run, enable to commit
-        else:                    
-            driver = webdriver.Chrome(chrome_options=chrome_options)  # enable for local run, disable to commit
-        
-        return driver
-
-    # Function to scrape URL and return HTML to be souped
-    def get_html_using_chrome(self, url, driver):
-        driver.get(url)
-        html = driver.page_source
-        # for debug
-        # print(html)
-        return html, 'chromedriver'
-
-    # Funciton to close browser to save memory
-    def close(self):
-        self.driver.close()
-        self.driver.quit()
 
     # Function to create the JSON we will use to create the image
     # {"article-url": "https://www.com.br/article",
