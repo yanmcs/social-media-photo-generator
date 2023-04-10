@@ -93,7 +93,7 @@ def social_image_builder(url, category, title, logo, branding_text, font_size=60
         I1.rectangle(((border, border+2), (category_text_width + border + 10, category_text_height + border + 5)), fill=(120, 120, 120, 255))
         I1.rectangle(((border, border), (category_text_width + border + 15, category_text_height + border + 5)), fill=(255, 255, 255, 255))
         # Draw a rectangle before the text for decoration
-        I1.rectangle(((border + 5, border + 5), (border - 5, category_text_height + border)), fill=(0, 0, 0, 120))
+        I1.rectangle(((border - 5, border + 5), (border + 5, category_text_height + border)), fill=(0, 0, 0, 120))
         # Add Text to an image
         I1.text((border + 10, border - 2), category, font=category_font, fill =(0, 0, 0, 255))
     
