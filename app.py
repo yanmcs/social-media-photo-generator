@@ -62,7 +62,7 @@ def index():
                 return 'error: e\n\n' + str(error), 200, {'Content-Type': 'text/plain'}
             else:
                 # Show message to user and link to go back to the website
-                return 'Deu ruim :(<br><br><a href="/">Didnt work Back to generator</a>', 200, {'Content-Type': 'text/html'}
+                return 'Deu ruim :(<br><br><a href="/">Didnt work Back to generator</a>', 500, {'Content-Type': 'text/html'}
     else:
         # flask render form.html
         return render_template('form.html'), 200, {'Content-Type': 'text/html'}
