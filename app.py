@@ -68,4 +68,4 @@ def index():
         return render_template('form.html'), 200, {'Content-Type': 'text/html'}
 
 if __name__ == "__main__":
-    app.run()
+    app.run(port=6001)
