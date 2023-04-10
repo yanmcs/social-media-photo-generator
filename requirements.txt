@@ -3,6 +3,4 @@ Flask-RESTful
 requests
 cfscrape
 beautifulsoup4
-selenium
 pillow
-webdriver-manager
