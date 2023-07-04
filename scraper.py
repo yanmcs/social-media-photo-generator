@@ -107,20 +107,19 @@ class Browser:
         info["title"] = self.clean_text(h1[-1].get_text())
 
         # Get cover image or whatever is possible
-        if the_content.select('img'):
+        if soup.find('meta', attrs={"property": "og:image"}):      
+            info["image"] = soup.find('meta', attrs={"property": "og:image"})['content']
+        elif soup.find('meta', attrs={"name": "twitter:image"}):
+            info["image"] = soup.find('meta', attrs={"name": "twitter:image"})['content']
+        elif the_content.select('img'):
             try:
                 if 'http' in the_content.select('img')[0]['src'] and 'data:image' not in the_content.select('img')[0]['src'] and 'gravatar' not in the_content.select('img')[0]['src']:
                     info["image"] = the_content.select('img')[0]['src']
             except:
                 if 'http' in the_content.select('img')[0]['data-src'] and 'data:image' not in the_content.select('img')[0]['data-src'] and 'gravatar' not in the_content.select('img')[0]['data-src']:
                     info["image"] = the_content.select('img')[0]['data-src']
-        if len(str(info["image"])) < 10:
-            if soup.find('meta', attrs={"property": "og:image"}):      
-                info["image"] = soup.find('meta', attrs={"property": "og:image"})['content']
-            elif soup.find('meta', attrs={"name": "twitter:image"}):
-                info["image"] = soup.find('meta', attrs={"name": "twitter:image"})['content']
-            else:
-                return 'Erro: não existe a tag de imagem destacada, tente inserir uma ou envie outra url de outro artigo'
+        else:
+            return 'Erro: não existe a tag de imagem destacada, tente inserir uma ou envie outra url de outro artigo'
 
         return info
 
